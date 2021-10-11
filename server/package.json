@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon index",
-    "server": "cross-env NODE_ENV=production index"
+    "server": "cross-env NODE_ENV=production node index"
   },
   "author": "",
   "license": "ISC",

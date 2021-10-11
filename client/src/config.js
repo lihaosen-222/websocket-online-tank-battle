@@ -1,2 +1,0 @@
-const url = 'http://localhost'
-

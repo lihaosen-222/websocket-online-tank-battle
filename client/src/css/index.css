@@ -33,7 +33,7 @@ body {
 }
 
 .player {
-  background-color: white;
+  background-color: rgb(177, 163, 163);
   left: 300px;
   top: 300px;
   border: 1px solid black;
@@ -47,7 +47,6 @@ body {
   top: 10px;
   left: 10px;
   transform-origin: 0px 2px;
-  /* transform: rotate(-45deg); */
 }
 
 .player .self {
