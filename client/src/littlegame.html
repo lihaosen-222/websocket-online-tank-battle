@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>复刻小游戏</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .shell {
+      height: 600px;
+      width: 600px;
+      background-color: lightblue;
+      position: relative;
+    }
+
+    .object > li {
+      height: 20px;
+      width: 20px;
+      position: absolute;
+      font-size: 12px;
+      line-height: 20px;
+      text-align: center;
+    }
+
+    .player {
+      background-color: white;
+      left: 580px;
+      top: 580px;
+    }
+
+    .enemy {
+      background-color: red;
+      left: 0;
+      top: 0;
+    }
+    .time {
+      text-align: center;
+      color: #9d9d9d;
+
+    }
+
+    .shell p {
+      margin-top: 250px;
+      color: #9d9d9d;
+      text-align: center;
+    }
+  </style>
+</head>
+<body> 
+  <div class="shell">
+    <div class="text">
+      <h4 class='time'> 存活时间: <span>0</span>s</h4>
+      <p>w a s d 控制方向。躲避怪物，存活更长的时间吧！</p>
+    </div>
+    <ul class="object">
+      <li class="player">你</li>
+      <li class="enemy">巢</li>
+    </ul>
+  </div>
+</body>
+<script>
+  // 按键对象
+  const key = {
+    a: {
+      code: 65,
+      isDown: false,
+    },
+    s: {
+      code: 83,
+      isDown: false,
+    },
+    d: {
+      code: 68,
+      isDown: false,
+    },
+    w: {
+      code: 87,
+      isDown: false,
+    },
+  }
+
+  // 弹起事件
+  document.addEventListener('keydown', function (e) {
+    // console.log(e.keyCode);
+    for (const k in key) {
+      if (key[k].code === e.keyCode) {
+        key[k].isDown = true
+        break
+      }
+    }
+  })
+  // 按下事件
+  document.addEventListener('keyup', function (e) {
+    for (const k in key) {
+      if (key[k].code === e.keyCode) {
+        key[k].isDown = false
+        break
+      }
+    }
+  })
+
+  // 玩家对象
+  let player = {
+    xNow: 580, // 初始位置
+    yNow: 580,
+    dom: document.querySelector('.player'),
+    move() {
+      // 检测按键
+      if (key.a.isDown) this.keyMove('x', -2)
+      if (key.s.isDown) this.keyMove('y', 2)
+      if (key.d.isDown) this.keyMove('x', 2)
+      if (key.w.isDown) this.keyMove('y', -2)
+    },
+    keyMove(direction, distance) {
+      // 根据参数改变玩家的位置
+      if (direction === 'x') {
+        // 先判断是否会碰墙，才位移
+        const xTo = this.xNow + distance
+        if (xTo < 580 && xTo > 0) {
+          this.dom.style.left = xTo + 'px'
+          this.xNow = xTo
+        }
+      }
+
+      if (direction === 'y') {
+        const yTo = this.yNow + distance
+        if (yTo < 580 && yTo > 0) {
+          this.dom.style.top = yTo + 'px'
+          this.yNow = yTo
+        }
+      }
+
+    }
+  }
+
+  //怪物构造函数
+  function Enemy() {
+    this.xNow = 0
+    this.yNow = 0
+    this.xDiff = 0
+    this.yDiff = -1 // 一开始就碰墙，触发追踪
+    this.dom = {}
+  }
+
+  // 原型中添加move方法
+  Enemy.prototype.move = function () {
+    const xTo = this.xNow + this.xDiff
+    const yTo = this.yNow + this.yDiff
+
+    // 函数：计算到玩家的x和y方向的位移 用箭头函数不用改this
+    let toPlayer = () => {
+      const xDiff = player.xNow - this.xNow
+      const yDiff = player.yNow - this.yNow
+      let angle = Math.atan(yDiff / xDiff)
+      if (xDiff < 0) angle = angle + Math.PI // 换算角度
+      this.yDiff = 2 * Math.sin(angle) // 移动直径2px
+      this.xDiff = 2 * Math.cos(angle)
+    }
+
+    if (xTo < 580 && xTo > 0) {
+      this.dom.style.left = xTo + 'px'
+      this.xNow = xTo
+    } else toPlayer()
+
+    if (yTo < 580 && yTo > 0) {
+      this.dom.style.top = yTo + 'px'
+      this.yNow = yTo
+    } else toPlayer()
+
+
+    // 判断是否触碰玩家
+    const isTouchX = this.xNow > player.xNow - 20 && this.xNow < player.xNow + 20
+    const isTouchY = this.yNow > player.yNow - 20 && this.yNow < player.yNow + 20
+    if (isTouchX && isTouchY) {
+      alert('GAME OVER!\n 你存活了' + time.innerHTML + 's')
+      clearInterval(coreTimer)
+      clearInterval(create)
+    }
+  }
+
+  // 存储怪物实例
+  const enemy = []
+  const object = document.querySelector('.object')
+
+  // 每1s创建一个新怪物
+  const create = setInterval(function () {
+    li = document.createElement('li')
+    li.innerHTML = '怪'
+    li.className = 'enemy'
+    object.appendChild(li)
+    enemy[enemy.length] = new Enemy()
+    enemy[enemy.length - 1].dom = li
+  }, 700)
+
+  // 记录开始时间
+  const timeState = +new Date()
+  const time = document.querySelector('.time > span')
+
+  // 游戏每20ms 刷新一次
+  const coreTimer = setInterval(function () {
+    timeSum = (+new Date() - timeState) / 1000 // 刷新计时器时间
+    time.innerHTML = timeSum
+
+    // 计算玩家和怪物的移动
+    player.move()
+    enemy.forEach(item => item.move())
+  }, 20)
+</script>
+</html>

@@ -1,0 +1,61 @@
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  list-style: none;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.shell {
+  height: 600px;
+  width: 600px;
+  background-color: lightblue;
+  position: relative;
+}
+
+.object > li {
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 20px;
+  text-align: center;
+}
+
+.player {
+  background-color: white;
+  left: 300px;
+  top: 300px;
+  border: 1px solid black;
+}
+
+.player .dir{
+  position: absolute;
+  height: 4px;
+  width: 20px;
+  background-color: black;
+  top: 10px;
+  left: 10px;
+  transform-origin: 0px 2px;
+  /* transform: rotate(-45deg); */
+}
+
+.player .self {
+  color: #1e1e1e
+}
+
+.player .enemy {
+  color: red
+}
+
+
