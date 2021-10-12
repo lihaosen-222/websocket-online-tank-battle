@@ -1,5 +1,5 @@
 import './css/index.css'
-import { key } from './object/key'
+import { keyboard } from './object/keyboard'
 import { player } from './object/player'
 import { socket } from './socket'
 import { mouse } from './object/mouse'
@@ -14,14 +14,12 @@ document.addEventListener('selectstart', function (e) {
   e.preventDefault();
 })
 
-key.init()
+keyboard.init()
 mouse.init()
 
 const coreTimer = setInterval(function () {
   // 当前客户端的操作
-  player[0].setAngle()
-  if (key.a.isDown) player[0].dash()
-  else if (key.space.isDown) player[0].move()
+  player[0].action()
   socket.emit('send', player[0].send())
 
   // 遍历player，改变玩家位姿

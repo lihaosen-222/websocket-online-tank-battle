@@ -1,4 +1,4 @@
-const key = {
+const keyboard = {
   a: {
     code: 65,
     isDown: false,
@@ -18,18 +18,18 @@ const key = {
   init() {
     // 注册弹起事件
     document.addEventListener('keydown', function (e) {
-      for (const k in key) {
-        if (key[k].code === e.keyCode) {
-          key[k].isDown = true
+      for (const k in keyboard) {
+        if (keyboard[k].code === e.keyCode) {
+          keyboard[k].isDown = true
           break
         }
       }
     })
     // 注册按下事件
     document.addEventListener('keyup', function (e) {
-      for (const k in key) {
-        if (key[k].code === e.keyCode) {
-          key[k].isDown = false
+      for (const k in keyboard) {
+        if (keyboard[k].code === e.keyCode) {
+          keyboard[k].isDown = false
           break
         }
       }
@@ -38,4 +38,4 @@ const key = {
 }
 
 
-export { key }
+export { keyboard }

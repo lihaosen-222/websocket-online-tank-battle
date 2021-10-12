@@ -1,4 +1,5 @@
 import { mouse } from './mouse'
+import { keyboard } from './keyboard'
 
 // 计算鼠标位置时用
 const shellDOM = document.querySelector('.shell')
@@ -24,24 +25,38 @@ const player = [] // 全部玩家的信息
 // 当前客户的信息
 player[0] = new Player()
 player[0].speed = 2
+player[0].toMouse = 0     // 客户到鼠标的距离
 player[0].dom = document.querySelector('.player')
 player[0].setAngle = function () {
   mouse.x = mouse.pageX - shellDOM.offsetLeft
   mouse.y = mouse.pageY - shellDOM.offsetTop
 
-  const xDiff = mouse.x - this.x
-  const yDiff = mouse.y - this.y
+  let xDiff = mouse.x - this.x - 10     // 换算到方块中心
+  const yDiff = mouse.y - this.y - 10
 
+  player[0].toMouse = Math.sqrt(xDiff * xDiff + yDiff * yDiff) // 计算出距离，之后要用
+
+  // 角度换算
   let angle = Math.atan(yDiff / xDiff)
-  if (xDiff < 0) angle = angle + Math.PI // 换算角度
+  if (xDiff < 0) angle = angle + Math.PI
   this.angle = angle
   const angle360 = angle / Math.PI / 2 * 360
   player[0].dom.children[1].style.transform = `rotate(${angle360}deg)`
 }
 
 player[0].move = function () {
-  const xDiff = this.speed * Math.cos(this.angle) // 移动直径2px
-  const yDiff = this.speed * Math.sin(this.angle)
+  let speed = 0 
+  
+  // 阻止在鼠标附近抖动
+  if (this.toMouse < 1) speed = 0 // 过小就不移动了
+  else {
+    if (this.speed > this.toMouse) speed = this.toMouse - 0.5 
+    // 并不需要刚好等于，分母为零会出问题，角度也会乱
+    else speed = this.speed
+  }
+  
+  const xDiff = speed * Math.cos(this.angle) // 移动直径2px
+  const yDiff = speed * Math.sin(this.angle)
   let xTo = this.x + xDiff
   let yTo = this.y + yDiff
 
@@ -78,5 +93,10 @@ player[0].send = function () {
   }
 }
 
+player[0].action = function () {
+  player[0].setAngle()
+  if (keyboard.a.isDown) player[0].dash()
+  else if (keyboard.space.isDown) player[0].move()
+}
 
 export { Player, player }
