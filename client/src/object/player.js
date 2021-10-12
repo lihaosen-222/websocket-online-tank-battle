@@ -8,14 +8,17 @@ const shellDOM = document.querySelector('.shell')
 function Player() {
   this.name = false  // 没名字时才会要求加载名字
   this.angle = 0
-  this.x = 300
+  this.x = 300  // 中心的坐标
   this.y = 300
   this.dom = {}
 }
 
+Player.prototype.xlength = 20
+Player.prototype.ylength = 20
+
 Player.prototype.otherMove = function () {
-  this.dom.style.left = this.x + 'px'
-  this.dom.style.top = this.y + 'px'
+  this.dom.style.left = this.x - this.xlength / 2 + 'px'
+  this.dom.style.top = this.y - this.ylength / 2 + 'px'
   const angle360 = this.angle / Math.PI / 2 * 360
   this.dom.children[1].style.transform = `rotate(${angle360}deg)`
 }
@@ -31,8 +34,8 @@ player[0].setAngle = function () {
   mouse.x = mouse.pageX - shellDOM.offsetLeft
   mouse.y = mouse.pageY - shellDOM.offsetTop
 
-  let xDiff = mouse.x - this.x - 10     // 换算到方块中心
-  const yDiff = mouse.y - this.y - 10
+  let xDiff = mouse.x - this.x     // 换算到方块中心
+  const yDiff = mouse.y - this.y
 
   player[0].toMouse = Math.sqrt(xDiff * xDiff + yDiff * yDiff) // 计算出距离，之后要用
 
@@ -54,26 +57,27 @@ player[0].move = function () {
     // 并不需要刚好等于，分母为零会出问题，角度也会乱
     else speed = this.speed
   }
-  
+
   const xDiff = speed * Math.cos(this.angle) // 移动直径2px
   const yDiff = speed * Math.sin(this.angle)
   let xTo = this.x + xDiff
   let yTo = this.y + yDiff
 
   // 如果要下次移动要超过边界，直接移动到边界位置
-  if (xTo < 0 || xTo > 580) {
+  if (xTo < 0 || xTo > 600) {
     if (xTo < 0) xTo = 0
-    else xTo = 580
+    else xTo = 600
   }
-  if (yTo < 0 || yTo > 580) {
+  if (yTo < 0 || yTo > 600) {
     if (yTo < 0) yTo = 0
-    else yTo = 580
+    else yTo = 600
   }
 
   this.x = xTo
   this.y = yTo
-  this.dom.style.left = xTo + 'px'
-  this.dom.style.top = yTo + 'px'
+
+  this.dom.style.left = xTo - this.xlength / 2 + 'px'   // 根据边长换算出left和top
+  this.dom.style.top = yTo - this.ylength / 2 + 'px'
 }
 
 player[0].dash = function () {
