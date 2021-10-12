@@ -11,6 +11,8 @@ function Bullet(name, xInit, yInit, xDiff, yDiff, dom) {
   this.dom = dom
 }
 
+Bullet.xLength = 4
+Bullet.yLength = 4
 Bullet.speed = 10
 Bullet.prototype.speed = 10
 
@@ -38,6 +40,7 @@ Bullet.send = function() {
 // 监听，若有请求则new子弹对象
 Bullet.createRegister = function() {
   socket.on('bullet', data => {
+    // console.log(player);
     const li = document.createElement('li')
     li.className = 'bullet'
     objectDOM.appendChild(li)
@@ -46,9 +49,11 @@ Bullet.createRegister = function() {
     for (let i = 0; i <= bullet.length; i++) {
       if (!bullet[i]) {
         bullet[i] = new Bullet(data.name, data.xInit, data.yInit, data.xDiff, data.yDiff, li)
+        // console.log(new Bullet(data.name, data.xInit, data.yInit, data.xDiff, data.yDiff, li));
         break
       }
     }
+
 
   })
 }
@@ -62,8 +67,31 @@ Bullet.move = function() {
       let xTo = bullet[i].x + bullet[i].xDiff
       let yTo = bullet[i].y + bullet[i].yDiff
 
-      // 碰墙检测
-      if (xTo < 0 || xTo > 600 || yTo < 0 || yTo > 600) {
+      let isTouchPlayer = false
+
+      for (let j = 0; j < player.length; j++) {
+
+        if (player[j]) { //数据不为空
+          // console.log(player[j].name, bullet[i].name, player[j].name !== bullet[i].name);
+          
+          if (player[j].name !== bullet[i].name) { // 该玩家不为当前子弹发送者，需判断碰撞
+            if (
+              Math.abs(player[j].x - bullet[i].x) < player[j].xLength / 2 + Bullet.xLength / 2
+              &&
+              Math.abs(player[j].y - bullet[i].y) < player[j].yLength / 2 + Bullet.yLength / 2
+            ) {
+              // console.log('for');
+              // console.log('touch');
+              isTouchPlayer = true
+              break
+            }
+          }
+        }
+
+      }
+
+      // 碰墙检测 击中检测
+      if (xTo < 0 || xTo > 600 || yTo < 0 || yTo > 600 || isTouchPlayer) {
         objectDOM.removeChild(bullet[i].dom)
         bullet[i] = undefined
 
@@ -72,14 +100,13 @@ Bullet.move = function() {
           if (!bullet[i]) bullet.splice(i, 1);
           else break
         }
-
       } else {
         // 正常移动
         bullet[i].x = xTo
         bullet[i].y = yTo
 
-        bullet[i].dom.style.left = xTo - 4 / 2 + 'px'   // 根据边长换算出left和top
-        bullet[i].dom.style.top = yTo - 4 / 2 + 'px'
+        bullet[i].dom.style.left = xTo - Bullet.xLength / 2 + 'px'   // 根据边长换算出left和top
+        bullet[i].dom.style.top = yTo - Bullet.yLength / 2 + 'px'
       }
 
     }

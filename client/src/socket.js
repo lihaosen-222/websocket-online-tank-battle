@@ -52,6 +52,7 @@ socket.on('all', (data) => {
         li.appendChild(dir)
         objectDOM.appendChild(li)
         player[i].dom = li
+        player[i].name = i  // 到时候再改吧
       }
 
       // 赋位姿信息

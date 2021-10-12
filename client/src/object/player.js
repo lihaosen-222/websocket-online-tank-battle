@@ -13,12 +13,12 @@ function Player() {
   this.dom = {}
 }
 
-Player.prototype.xlength = 20
-Player.prototype.ylength = 20
+Player.prototype.xLength = 20
+Player.prototype.yLength = 20
 
 Player.prototype.otherMove = function () {
-  this.dom.style.left = this.x - this.xlength / 2 + 'px'
-  this.dom.style.top = this.y - this.ylength / 2 + 'px'
+  this.dom.style.left = this.x - this.xLength / 2 + 'px'
+  this.dom.style.top = this.y - this.yLength / 2 + 'px'
   const angle360 = this.angle / Math.PI / 2 * 360
   this.dom.children[1].style.transform = `rotate(${angle360}deg)`
 }
@@ -76,8 +76,8 @@ player[0].move = function () {
   this.x = xTo
   this.y = yTo
 
-  this.dom.style.left = xTo - this.xlength / 2 + 'px'   // 根据边长换算出left和top
-  this.dom.style.top = yTo - this.ylength / 2 + 'px'
+  this.dom.style.left = xTo - this.xLength / 2 + 'px'   // 根据边长换算出left和top
+  this.dom.style.top = yTo - this.yLength / 2 + 'px'
 }
 
 player[0].dash = function () {
