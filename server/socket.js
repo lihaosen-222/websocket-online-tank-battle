@@ -19,15 +19,16 @@ io.on('connection', socket => {
     }
   }
   console.log(name, '建立连接！');
-  // console.log(playerArr);
-  // console.log('length',playerArr.length)
   
   // 断开连接时清除数据,发送断开的序号
   socket.on("disconnect", reason => {
     playerArr[name] = undefined
     for (let i = playerArr.length - 1; i > 0; i--) {
-      if (!playerArr[i]) playerArr.splice(i);
+      if (!playerArr[i]) playerArr.splice(i, 1);
+      else break
     }
+    
+    console.log(playerArr);
     io.emit('sign-out', name)
     console.log(name, '断开连接！');
   });
@@ -35,6 +36,10 @@ io.on('connection', socket => {
   socket.on('send', data => {
     playerArr[name] = data
   });
+
+  socket.on('bullet', data => {
+    io.emit('bullet', data)
+  })
 
 })
 

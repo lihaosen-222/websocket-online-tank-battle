@@ -2,7 +2,8 @@ import './css/index.css'
 import { keyboard } from './object/keyboard'
 import { player } from './object/player'
 import { socket } from './socket'
-import { mouse } from './object/mouse'
+import { mouse, mouseKey } from './object/mouse'
+import { Bullet, bullet } from './object/bullet'
 
 
 // 取右键菜单操作
@@ -16,6 +17,9 @@ document.addEventListener('selectstart', function (e) {
 
 keyboard.init()
 mouse.init()
+Bullet.createRegister()
+
+const objectDOM = document.querySelector('.object')
 
 const coreTimer = setInterval(function () {
   // 当前客户端的操作
@@ -29,5 +33,9 @@ const coreTimer = setInterval(function () {
       player[i].otherMove()
     }
   }
+  
+  Bullet.send()
+  Bullet.move()
+
 }, 20)
 

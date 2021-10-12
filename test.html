@@ -10,14 +10,12 @@
 
 </body>
 <script>
-  // document.addEventListener('keydown', function (e) {
-  //   console.log(e.keyCode);
-  // })
-  function test() {}
-  test.test1 = function() {
-    console.log('666');
-  }
-
-  test.test1()
+  document.addEventListener('mousedown', function (e) {
+    console.log('down', e.which );
+    
+  })
+  document.addEventListener('mouseup', function (e) {
+    console.log('up', e.which );
+  })
 </script>
 </html>

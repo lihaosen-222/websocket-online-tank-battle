@@ -27,9 +27,11 @@ socket.on('sign-out', data => {
   player[data] = undefined
   // 清楚多余的undefined
   for (let i = player.length - 1; i > 0; i--) {
-    if (!player[i]) player.splice(i);
+    if (!player[i]) player.splice(i, 1);
+    else break
   }
   console.log(player);
+  // console.log(player);
 })
 
 // 群发信息，创建DOM，更新位姿
@@ -59,5 +61,7 @@ socket.on('all', (data) => {
     }
   }
 })
+
+
 
 export { socket }
