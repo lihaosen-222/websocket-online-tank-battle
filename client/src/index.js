@@ -1,9 +1,9 @@
 import './css/index.css'
 import { keyboard } from './object/keyboard'
-import { player } from './object/player'
-import { socket } from './socket'
-import { mouse, mouseKey } from './object/mouse'
-import { Bullet, bullet } from './object/bullet'
+import { Player, player } from './object/player'
+import { socket, socketInit } from './socket'
+import { mouse } from './object/mouse'
+import { Bullet } from './object/bullet'
 
 
 // 取右键菜单操作
@@ -18,24 +18,13 @@ document.addEventListener('selectstart', function (e) {
 keyboard.init()
 mouse.init()
 Bullet.createRegister()
-
-const objectDOM = document.querySelector('.object')
+socketInit()
 
 const coreTimer = setInterval(function () {
-  // 当前客户端的操作
-  player[0].action()
-  socket.emit('send', player[0].send())
-
-  // 遍历player，改变玩家位姿
-  for (let i = 1; i < player.length; i++) {
-    // 排除当前客户端，且要求该player数据存在
-    if (player[0].name !== i && player[i]) {
-      player[i].otherMove()
-    }
-  }
-  
+  player[0].action()  // 当前客户端的操作
+  socket.emit('sigle-player', player[0].send())
+  Player.otherMove()
   Bullet.send()
   Bullet.move()
-
 }, 20)
 

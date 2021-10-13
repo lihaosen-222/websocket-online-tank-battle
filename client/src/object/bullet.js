@@ -31,7 +31,7 @@ Bullet.send = function() {
       xInit: player[0].x,
       yInit: player[0].y,
       xDiff,
-      yDiff,
+      yDiff
     })
 
   }
@@ -40,7 +40,6 @@ Bullet.send = function() {
 // 监听，若有请求则new子弹对象
 Bullet.createRegister = function() {
   socket.on('bullet', data => {
-    // console.log(player);
     const li = document.createElement('li')
     li.className = 'bullet'
     objectDOM.appendChild(li)
@@ -49,12 +48,9 @@ Bullet.createRegister = function() {
     for (let i = 0; i <= bullet.length; i++) {
       if (!bullet[i]) {
         bullet[i] = new Bullet(data.name, data.xInit, data.yInit, data.xDiff, data.yDiff, li)
-        // console.log(new Bullet(data.name, data.xInit, data.yInit, data.xDiff, data.yDiff, li));
         break
       }
     }
-
-
   })
 }
 

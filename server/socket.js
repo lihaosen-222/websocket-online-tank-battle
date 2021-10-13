@@ -33,7 +33,7 @@ io.on('connection', socket => {
     console.log(name, '断开连接！');
   });
 
-  socket.on('send', data => {
+  socket.on('sigle-player', data => {
     playerArr[name] = data
   });
 
@@ -44,7 +44,7 @@ io.on('connection', socket => {
 })
 
 const coreTimer = setInterval(function () {
-  io.emit('all', playerArr)
+  io.emit('all-player', playerArr)
 }, 20)
 
 

@@ -15,12 +15,17 @@ function Player() {
 
 Player.prototype.xLength = 20
 Player.prototype.yLength = 20
-
-Player.prototype.otherMove = function () {
-  this.dom.style.left = this.x - this.xLength / 2 + 'px'
-  this.dom.style.top = this.y - this.yLength / 2 + 'px'
-  const angle360 = this.angle / Math.PI / 2 * 360
-  this.dom.children[1].style.transform = `rotate(${angle360}deg)`
+Player.otherMove = function () {
+  // 遍历player，改变玩家位姿
+  for (let i = 1; i < player.length; i++) {
+    // 排除当前客户端，且要求该player数据存在
+    if (player[0].name !== i && player[i]) {
+      player[i].dom.style.left = player[i].x - player[i].xLength / 2 + 'px'
+      player[i].dom.style.top = player[i].y - player[i].yLength / 2 + 'px'
+      const angle360 = player[i].angle / Math.PI / 2 * 360
+      player[i].dom.children[1].style.transform = `rotate(${angle360}deg)`
+    }
+  }
 }
 
 const player = [] // 全部玩家的信息
