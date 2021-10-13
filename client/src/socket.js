@@ -16,7 +16,6 @@ function socketInit() {
     if (thisPlayer.name === undefined) {
       thisPlayer.name = name
       thisPlayer.dom.children[0].innerHTML = name
-      console.log(thisPlayer.name);
     }
   })
 
@@ -49,8 +48,6 @@ function socketInit() {
           li.appendChild(dir)
           objectDOM.appendChild(li)
           player[i].dom = li
-
-          console.log('createDOM',data[i].name);
         }
         player[i].name = data[i].name  // 到时候再改吧
       }

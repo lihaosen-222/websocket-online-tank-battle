@@ -33,6 +33,7 @@ const player = [] // 全部玩家的信息
 const thisPlayer = new Player()
 thisPlayer.speed = 2
 thisPlayer.toMouse = 0     // 客户到鼠标的距离
+thisPlayer.isShotAvailable = true
 thisPlayer.dom = document.querySelector('.player')
 thisPlayer.setAngle = function () {
   mouse.x = mouse.pageX - shellDOM.offsetLeft

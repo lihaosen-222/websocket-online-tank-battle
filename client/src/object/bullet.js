@@ -1,6 +1,7 @@
 import { mouseKey } from './mouse'
 import { socket } from '.././socket'
 import { player, thisPlayer } from './player'
+import { keyboard } from './keyboard'
 
 function Bullet(name, xInit, yInit, xDiff, yDiff, dom) {
   this.name = name
@@ -20,8 +21,12 @@ let bullet = []
 
 // 计算出diff，封装成对象发送
 Bullet.send = function() {
-  if (mouseKey.left.isDown) {
-    mouseKey.left.isDown = false
+  if ((mouseKey.left.isDown || keyboard.s.isDown) && thisPlayer.isShotAvailable) {
+    thisPlayer.isShotAvailable = false
+    const shotTimer = setTimeout(() => {
+      thisPlayer.isShotAvailable = true
+      clearTimeout(shotTimer)
+    }, 300)
 
     const xDiff = Bullet.speed * Math.cos(thisPlayer.angle) // 移动直径2px
     const yDiff = Bullet.speed * Math.sin(thisPlayer.angle)
@@ -72,7 +77,6 @@ Bullet.move = function() {
     // 碰墙检测 击中检测
     if (xTo < 0 || xTo > 600 || yTo < 0 || yTo > 600 || isTouchPlayer) {
       objectDOM.removeChild(itemBullet.dom)
-      console.log(bullet);
       return false  // 直接排除该数据
     } else {
       // 正常移动
