@@ -62,6 +62,6 @@ body {
   height: 4px;
   width: 4px;
   background-color: black;
-  left: 20px;
-  top: 30px;
+  left: -4px;
+  top: -4px;
 }

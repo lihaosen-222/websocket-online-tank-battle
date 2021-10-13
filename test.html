@@ -10,12 +10,12 @@
 
 </body>
 <script>
-  document.addEventListener('mousedown', function (e) {
-    console.log('down', e.which );
-    
+  let arr = []
+  arr.forEach(() => {
+    console.log('for');
   })
-  document.addEventListener('mouseup', function (e) {
-    console.log('up', e.which );
-  })
+  if(arr.length === 0) {
+    console.log('for');
+  }
 </script>
 </html>

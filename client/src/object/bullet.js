@@ -1,6 +1,6 @@
 import { mouseKey } from './mouse'
 import { socket } from '.././socket'
-import { player } from './player'
+import { player, thisPlayer } from './player'
 
 function Bullet(name, xInit, yInit, xDiff, yDiff, dom) {
   this.name = name
@@ -23,13 +23,13 @@ Bullet.send = function() {
   if (mouseKey.left.isDown) {
     mouseKey.left.isDown = false
 
-    const xDiff = Bullet.speed * Math.cos(player[0].angle) // 移动直径2px
-    const yDiff = Bullet.speed * Math.sin(player[0].angle)
+    const xDiff = Bullet.speed * Math.cos(thisPlayer.angle) // 移动直径2px
+    const yDiff = Bullet.speed * Math.sin(thisPlayer.angle)
 
     socket.emit('bullet', {
-      name: player[0].name,
-      xInit: player[0].x,
-      yInit: player[0].y,
+      name: thisPlayer.name,
+      xInit: thisPlayer.x,
+      yInit: thisPlayer.y,
       xDiff,
       yDiff
     })

@@ -6,7 +6,7 @@ const shellDOM = document.querySelector('.shell')
 
 
 function Player() {
-  this.name = false  // 没名字时才会要求加载名字
+  this.name = undefined  // 没名字时才会要求加载名字
   this.angle = 0
   this.x = 300  // 中心的坐标
   this.y = 300
@@ -17,9 +17,9 @@ Player.prototype.xLength = 20
 Player.prototype.yLength = 20
 Player.otherMove = function () {
   // 遍历player，改变玩家位姿
-  for (let i = 1; i < player.length; i++) {
+  for (let i = 0; i < player.length; i++) {
     // 排除当前客户端，且要求该player数据存在
-    if (player[0].name !== i && player[i]) {
+    if (thisPlayer.name !== player[i].name) {
       player[i].dom.style.left = player[i].x - player[i].xLength / 2 + 'px'
       player[i].dom.style.top = player[i].y - player[i].yLength / 2 + 'px'
       const angle360 = player[i].angle / Math.PI / 2 * 360
@@ -29,30 +29,29 @@ Player.otherMove = function () {
 }
 
 const player = [] // 全部玩家的信息
-
 // 当前客户的信息
-player[0] = new Player()
-player[0].speed = 2
-player[0].toMouse = 0     // 客户到鼠标的距离
-player[0].dom = document.querySelector('.player')
-player[0].setAngle = function () {
+const thisPlayer = new Player()
+thisPlayer.speed = 2
+thisPlayer.toMouse = 0     // 客户到鼠标的距离
+thisPlayer.dom = document.querySelector('.player')
+thisPlayer.setAngle = function () {
   mouse.x = mouse.pageX - shellDOM.offsetLeft
   mouse.y = mouse.pageY - shellDOM.offsetTop
 
   let xDiff = mouse.x - this.x     // 换算到方块中心
   const yDiff = mouse.y - this.y
 
-  player[0].toMouse = Math.sqrt(xDiff * xDiff + yDiff * yDiff) // 计算出距离，之后要用
+  this.toMouse = Math.sqrt(xDiff * xDiff + yDiff * yDiff) // 计算出距离，之后要用
 
   // 角度换算
   let angle = Math.atan(yDiff / xDiff)
   if (xDiff < 0) angle = angle + Math.PI
   this.angle = angle
   const angle360 = angle / Math.PI / 2 * 360
-  player[0].dom.children[1].style.transform = `rotate(${angle360}deg)`
+  this.dom.children[1].style.transform = `rotate(${angle360}deg)`
 }
 
-player[0].move = function () {
+thisPlayer.move = function () {
   let speed = 0 
   
   // 阻止在鼠标附近抖动
@@ -85,27 +84,27 @@ player[0].move = function () {
   this.dom.style.top = yTo - this.yLength / 2 + 'px'
 }
 
-player[0].dash = function () {
-  player[0].speed = 10
-  player[0].move()
-  player[0].speed = 2
+thisPlayer.dash = function () {
+  this.speed = 10
+  this.move()
+  this.speed = 2
 }
 
 // 发送关键数据给服务器
-player[0].send = function () {
+thisPlayer.send = function () {
   // 返回关键信息
   return {
-    name: player[0].name,
-    x: player[0].x,
-    y: player[0].y,
-    angle: player[0].angle
+    name: this.name,
+    x: this.x,
+    y: this.y,
+    angle: this.angle
   }
 }
 
-player[0].action = function () {
-  player[0].setAngle()
-  if (keyboard.a.isDown) player[0].dash()
-  else if (keyboard.space.isDown) player[0].move()
+thisPlayer.action = function () {
+  this.setAngle()
+  if (keyboard.a.isDown) this.dash()
+  else if (keyboard.space.isDown) this.move()
 }
 
-export { Player, player }
+export { Player, player, thisPlayer }
