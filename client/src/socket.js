@@ -1,4 +1,6 @@
 import { io } from 'socket.io-client'
+import { keyboard } from './object/keyboard'
+import { mouseKey } from './object/mouse'
 import { Player, player, thisPlayer } from './object/player'
 
 if (ENV === 'development') {
@@ -7,6 +9,7 @@ if (ENV === 'development') {
 if (ENV === 'production') {
   var socket = io('http://81.68.226.188:8001')
 }
+
 
 function socketInit() {
   // 创建和删除DOM时用
@@ -21,14 +24,7 @@ function socketInit() {
 
   // 登出信息，在这删除DOM
   socket.on('sign-out', name => {
-    console.log(player);
-    for(let i = 0; i < player.length; i++){
-      if (player[i].name === name) {
-        objectDOM.removeChild(player[i].dom)
-        player.splice(i, 1)
-        break
-      } 
-    }
+    removePlayer(name)
   })
 
   // 群发信息，创建DOM，更新位姿
@@ -48,6 +44,8 @@ function socketInit() {
           li.appendChild(dir)
           objectDOM.appendChild(li)
           player[i].dom = li
+        } else {
+          player[i].dom = thisPlayer.dom
         }
         player[i].name = data[i].name  // 到时候再改吧
       }
@@ -59,6 +57,24 @@ function socketInit() {
     }
   })
 
+  socket.on('shot-down', name => {
+    if(thisPlayer.name === name) {
+      alert('you are shotted down, 刷新再次加入战斗')
+      thisPlayer.isShot = true
+    }
+    removePlayer(name)
+  })
+
+  function removePlayer(name) {
+    for (let i = 0; i < player.length; i++) {
+      if (player[i].name === name) {
+        console.log(player);
+        objectDOM.removeChild(player[i].dom)
+        player.splice(i, 1)
+        break
+      }
+    }
+  }
 }
 
 export { socket, socketInit }

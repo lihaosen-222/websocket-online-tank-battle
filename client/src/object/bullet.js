@@ -62,13 +62,15 @@ Bullet.move = function() {
     let isTouchPlayer = false
 
     player.some(itemPlayer => {
-      if (itemPlayer.name !== itemBullet.name) { // 该玩家不为当前子弹发送者，需判断碰撞
+      if (itemPlayer.name !== itemBullet.name) { 
+        // 该玩家不为当前子弹发送者(注意不是thisPlayer！！！！！)，需判断碰撞
         if (
           Math.abs(itemPlayer.x - itemBullet.x) < itemPlayer.xLength / 2 + Bullet.xLength / 2
           &&
           Math.abs(itemPlayer.y - itemBullet.y) < itemPlayer.yLength / 2 + Bullet.yLength / 2
         ) {
           isTouchPlayer = true
+          if (itemBullet.name === thisPlayer.name) socket.emit('shot-down', itemPlayer.name)
           return true
         }
       }

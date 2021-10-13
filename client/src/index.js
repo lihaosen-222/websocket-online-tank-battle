@@ -26,5 +26,6 @@ const coreTimer = setInterval(function () {
   Player.otherMove()
   Bullet.send()
   Bullet.move()
+  if (thisPlayer.isShot) clearInterval(coreTimer)
 }, 20)
 

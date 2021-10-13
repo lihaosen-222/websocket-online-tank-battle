@@ -47,9 +47,21 @@ io.on('connection', socket => {
     }
   });
 
+  // 击中
+  socket.on('shot-down', name => {
+    io.emit('shot-down', name)
+    for (let i = 0; i < playerArr.length; i++) {
+      if (playerArr[i].name === name) {
+        playerArr.splice(i, 1)
+        break
+      }
+    }
+  });
+
   socket.on('bullet', data => {
     io.emit('bullet', data)
   })
+  
 
 })
 
