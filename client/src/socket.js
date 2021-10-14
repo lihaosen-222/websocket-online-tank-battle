@@ -29,6 +29,10 @@ function socketInit() {
   // 登出信息，在这删除DOM
   socket.on('sign-out', name => {
     removePlayer(name)
+    if (name === thisPlayer.name) {
+      alert('你掉线了')
+      thisPlayer.isShot = true
+    }
   })
 
   // 群发信息，创建DOM，更新位姿
@@ -66,13 +70,14 @@ function socketInit() {
       alert('you are shotted down, 刷新再次加入战斗')
       thisPlayer.isShot = true
     }
+    console.log(name, '击中后被删除被删除了');
     removePlayer(name)
   })
 
   function removePlayer(name) {
     for (let i = 0; i < player.length; i++) {
       if (player[i].name === name) {
-        console.log(player);
+        console.log(player[i].name, '被删除了');
         objectDOM.removeChild(player[i].dom)
         player.splice(i, 1)
         break
