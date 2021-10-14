@@ -19,6 +19,10 @@ function socketInit() {
     if (thisPlayer.name === undefined) {
       thisPlayer.name = name
       thisPlayer.dom.children[0].innerHTML = name
+      thisPlayer.x = Math.random() * 600
+      thisPlayer.y = Math.random() * 600
+      thisPlayer.dom.style.left = thisPlayer.x - thisPlayer.xLength / 2 + 'px'   // 根据边长换算出left和top
+      thisPlayer.dom.style.top = thisPlayer.y - thisPlayer.yLength / 2 + 'px'
     }
   })
 

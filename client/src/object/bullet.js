@@ -22,6 +22,9 @@ let bullet = []
 // 计算出diff，封装成对象发送
 Bullet.send = function() {
   if ((mouseKey.left.isDown || keyboard.s.isDown) && thisPlayer.isShotAvailable) {
+
+    console.log(thisPlayer);
+
     thisPlayer.isShotAvailable = false
     const shotTimer = setTimeout(() => {
       thisPlayer.isShotAvailable = true
