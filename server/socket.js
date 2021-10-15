@@ -24,7 +24,7 @@ io.on('connection', socket => {
   io.emit('sign-in', name)
   
 
-  // 断开连接时清除数据,发送断开的序号
+  // 断开连接时清除数据（被击中后的玩家数据不会再次删除）,发送断开的序号
   socket.on("disconnect", reason => {
     let isShoted = false
     
@@ -45,12 +45,7 @@ io.on('connection', socket => {
       io.emit('sign-out', name)
       console.log(name, '没被击中断开连接');
       playerArr.forEach(item => console.log(item.name))
-
-
     }
-
-
-
   });
 
   // 一个玩家的数据传输
@@ -63,7 +58,7 @@ io.on('connection', socket => {
     }
   });
 
-  // 击中
+  // 有玩家被击中，添加子弹数组
   socket.on('shot-down', nameShoted => {
     io.emit('shot-down', nameShoted)
     for (let i = 0; i < playerArr.length; i++) {
@@ -79,21 +74,10 @@ io.on('connection', socket => {
 
   });
 
+  // 转发子弹数据
   socket.on('bullet', data => {
     io.emit('bullet', data)
   })
-  
- function removePlayer(name) {
-  shotedArr.forEach(item => {})
-
-  for (let i = 0; i < playerArr.length; i++) {
-    if (playerArr[i].name === name) {
-      playerArr.splice(i, 1)
-      break
-    }
-  }
-     
- }
 })
 
 const coreTimer = setInterval(function () {

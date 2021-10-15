@@ -4,7 +4,6 @@ import { keyboard } from './keyboard'
 // 计算鼠标位置时用
 const shellDOM = document.querySelector('.shell')
 
-
 function Player() {
   this.name = undefined  // 没名字时才会要求加载名字
   this.angle = 0
