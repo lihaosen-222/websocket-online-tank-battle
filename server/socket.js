@@ -22,7 +22,7 @@ io.on('connection', socket => {
   let name = getName()
   playerArr[playerArr.length] = { name }
   io.emit('sign-in', name)
-  
+
 
   // 断开连接时清除数据（被击中后的玩家数据不会再次删除）,发送断开的序号
   socket.on("disconnect", reason => {
