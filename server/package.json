@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon index",
-    "server": "cross-env NODE_ENV=production node index"
+    "dev": "cross-env NODE_ENV=development nodemon --inspect src/index",
+    "server": "cross-env NODE_ENV=production node --inspect src/index"
   },
   "author": "",
   "license": "ISC",
