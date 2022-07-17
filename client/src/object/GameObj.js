@@ -51,4 +51,4 @@ class GameObj {
   }
 }
 
-module.exports = GameObj
+export default GameObj

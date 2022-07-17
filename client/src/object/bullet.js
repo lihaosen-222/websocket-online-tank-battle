@@ -1,5 +1,5 @@
-const GameObj = require('./GameObj')
-const MyGameObj = require('./MyGameObj')
+import GameObj from './GameObj'
+import MyGameObj from './MyGameObj'
 
 function createBulletDOM(className) {
   const DOM = document.createElement('li')
@@ -31,5 +31,4 @@ function newBullet(type, config) {
     }
   }
 }
-
-module.exports = newBullet
+export default newBullet

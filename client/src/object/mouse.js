@@ -1,22 +1,20 @@
-const { mouse } = require('../../src copy/object/mouse')
-
 class Mouse {
   constructor(name) {
     this.x = 0
     this.y = 0
     this.isDown = false
-    this.gameDom = document.querySelector(name)
+    this.mapDom = document.querySelector(name)
 
     document.addEventListener('mousemove', (e) => {
-      this.x = e.pageX - gameDom.offsetLeft
-      this.y = e.pageY - gameDom.offsetTop
+      this.x = e.pageX - this.mapDom.offsetLeft
+      this.y = e.pageY - this.mapDom.offsetTop
     })
 
-    document.addEventListener('mousedown', function (e) {
+    document.addEventListener('mousedown', (e) => {
       if (e.button === 0) this.isDown = true
     })
 
-    document.addEventListener('mouseup', function (e) {
+    document.addEventListener('mouseup', (e) => {
       if (e.button === 0) this.isDown = false
     })
   }
@@ -31,9 +29,11 @@ class Mouse {
   }
 
   getObjToMouseAngle(xPos, yPos) {
-    const angle = Math.atan(this.y - yPos / this.x - xPos)
-    return angle > 0 ? angle : angle + Math.PI
+    const xDiff = this.x - xPos
+    const yDiff = this.y - yPos
+    const angle = Math.atan(yDiff / xDiff)
+    return xDiff > 0 ? angle : angle + Math.PI
   }
 }
 
-module.exports = Mouse
+export default Mouse

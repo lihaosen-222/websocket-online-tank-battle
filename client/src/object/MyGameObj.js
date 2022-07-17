@@ -1,4 +1,4 @@
-const GameObj = require('./GameObj')
+import GameObj from './GameObj'
 
 class MyGameObj extends GameObj {
   constructor(config) {
@@ -21,4 +21,4 @@ class MyGameObj extends GameObj {
   }
 }
 
-module.exports = MyGameObj
+export default MyGameObj

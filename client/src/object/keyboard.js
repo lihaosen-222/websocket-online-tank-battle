@@ -2,12 +2,12 @@ class Keyboard {
   constructor() {
     this.isDown = false
 
-    document.addEventListener('keyup', function (e) {
-      if (e.key === 'Space') this.isDown = false
+    document.addEventListener('keyup', (e) => {
+      if (e.code === 'Space') this.isDown = false
     })
 
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Space') this.isDown = false
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') this.isDown = true
     })
   }
 
@@ -15,5 +15,4 @@ class Keyboard {
     return this.isDown
   }
 }
-
-module.exports = Keyboard
+export default Keyboard

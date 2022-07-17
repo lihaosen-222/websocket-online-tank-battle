@@ -1,5 +1,5 @@
-const GameObj = require('./GameObj')
-const MyGameObj = require('./MyGameObj')
+import GameObj from './GameObj'
+import MyGameObj from './MyGameObj'
 
 function createTanktDOM(className) {
   const DOM = document.createElement('li')
@@ -61,4 +61,4 @@ function newTank(type, config) {
   }
 }
 
-module.exports = newTank
+export default newTank
