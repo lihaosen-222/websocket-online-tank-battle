@@ -8,7 +8,7 @@ class MyGameObj extends GameObj {
     this.direction = direction
   }
 
-  setDirection(direction) {
+  updateDirection(direction) {
     this.direction = direction
   }
 

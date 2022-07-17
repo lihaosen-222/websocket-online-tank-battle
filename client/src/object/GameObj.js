@@ -10,10 +10,10 @@ class GameObj {
     this.DOM = DOM // 要自己创建 DOM
   }
 
-  create(xPos, yPos) {
+  create(xPos = this.xPos, yPos = this.yPos) {
     this.updatePosition(xPos, yPos)
     this.render()
-    this.faterDOM.appendChild(this.DOM)
+    this.fatherDOM.appendChild(this.DOM)
   }
 
   updatePosition(xPos, yPos) {
@@ -29,8 +29,8 @@ class GameObj {
   // 根据自身维护的数据渲染
   render() {
     const { xPos, yPos, xLength, yLength, DOM } = this
-    DOM.style.left = xPos - xLength + 'px'
-    DOM.style.top = yPos - yLength + 'px'
+    DOM.style.left = xPos - xLength/2 + 'px'
+    DOM.style.top = yPos - yLength/2 + 'px'
   }
 
   destroy() {
