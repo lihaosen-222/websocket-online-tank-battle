@@ -1,8 +1,9 @@
 import './css/index.css'
-import GameMap from './object/GameMap'
-import KeyBoard from './object/Keyboard'
-import Mouse from './object/Mouse'
+import startTimer from './coreTimer'
+import { io } from 'socket.io-client'
 import newTank from './object/Tank'
+
+var socket = io('http://localhost:3007')
 
 // 取右键菜单操作
 document.addEventListener('contextmenu', function (e) {
@@ -13,41 +14,51 @@ document.addEventListener('selectstart', function (e) {
   e.preventDefault()
 })
 
-const keyBoard = new KeyBoard()
-const mouse = new Mouse('.shell')
-const gameMap = new GameMap(600, 600)
+const otherTank = {}
 
-const myTank = newTank('my', {
-  fatherDOM: document.querySelector('.tank-obj'),
-  ...gameMap.getRandomPosition(),
-})
-myTank.create()
-
-const coreTimer = setInterval(function () {
-  const { xPos, yPos } = myTank.getPostion()
-  myTank.updateDirection(mouse.getObjToMouseAngle(xPos, yPos))
-  myTank.renderBarrel()
-
-  if (mouse.getIsDown()) {
-    myTank.fire()
+socket.on('gameState', (gameState) => {
+  delete gameState[socket.id]
+  // 可以写个函数，得到死亡 id
+  const tankIds = Object.keys(otherTank)
+  for (const k in gameState) {
+    if (tankIds.includes(k)) tankIds.splice(tankIds.indexOf(k), 1)
   }
-
-  myTank.bullets = myTank.bullets.filter((bullet) => {
-    const { xPos, yPos } = bullet.getNextPostion()
-    if (gameMap.isCollided(xPos, yPos)) {
-      bullet.destroy()
-      return false
-    }
-    bullet.updatePosition(xPos, yPos)
-    bullet.render()
-    return true
+  tankIds.forEach((id) => {
+    otherTank[id].destroy() // 销毁死亡的 tank
+    delete otherTank[id]
   })
 
-  if (keyBoard.getIsDown()) {
-    let { xPos: xTo, yPos: yTo } = myTank.getNextPostion()
-    xTo = gameMap.isXCollided(xTo) ? xPos : xTo
-    yTo = gameMap.isYCollided(yTo) ? yPos : yTo
-    myTank.updatePosition(xTo, yTo)
-    myTank.render()
+  for (const k in gameState) {
+    const { tank, bullets } = gameState[k]
+    if (!tank) return  // 刚开始可能传空对象
+    const { xPos, yPos, direction } = tank
+
+    if (otherTank[k]) {
+      const tank = otherTank[k]
+
+      tank.updatePosition(xPos, yPos)
+      tank.updateDirection(direction)
+      tank.renderBarrel()
+      tank.render()
+      tank.updateBullets(bullets)
+      tank.renderBullets() 
+    }
+    // 新增 tank
+    else {
+      const tank = newTank('other', {
+        fatherDOM: document.querySelector('.tank-obj'),
+        xPos,
+        yPos,
+        direction,
+      })
+      tank.create()
+      tank.renderBarrel()
+      tank.render()
+      otherTank[k] = tank
+    }
   }
-}, 20)
+
+  // updateBullets
+})
+
+const coreTimer = startTimer(socket)
