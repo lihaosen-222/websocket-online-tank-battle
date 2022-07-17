@@ -1,9 +1,10 @@
 import GameMap from './object/GameMap'
 import KeyBoard from './object/Keyboard'
 import Mouse from './object/Mouse'
+import GameObj from './object/GameObj'
 import newTank from './object/Tank'
 
-export default function startTimer(socket) {
+export default function startTimer(socket,otherTanks) {
   const keyBoard = new KeyBoard()
   const mouse = new Mouse('.shell')
   const gameMap = new GameMap(600, 600)
@@ -41,6 +42,17 @@ export default function startTimer(socket) {
       bullet.render()
       return true
     })
+
+    myTank.bullets.forEach(bullet => {
+      for (const id in otherTanks) {
+        // console.log(bullet)
+        if (GameObj.isCollided(otherTanks[id], bullet)) {
+          console.log('kill')
+          socket.emit('kill', id)
+        }
+      }
+    })
+
     // console.log(Object.keys(myTank.getState()) === 0)
     socket.emit('singleState', myTank.getState())
   }, 20)

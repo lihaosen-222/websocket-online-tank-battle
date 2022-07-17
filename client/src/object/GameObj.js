@@ -39,6 +39,7 @@ class GameObj {
 
   static isCollided(obj1, obj2) {
     const { isOverLap } = GameObj
+    // console.log(isOverLap('x', obj1, obj2))
     return isOverLap('x', obj1, obj2) && isOverLap('y', obj1, obj2)
   }
 
@@ -46,7 +47,7 @@ class GameObj {
     const isX = direction === 'x' || 'X'
     const position = isX ? 'xPos' : 'yPos'
     const length = isX ? 'xLength' : 'yLength'
-    Math.abs(obj1[position] - obj2[position]) <
+    return Math.abs(obj1[position] - obj2[position]) <
       obj1[length] / 2 + obj2[length] / 2
   }
 }

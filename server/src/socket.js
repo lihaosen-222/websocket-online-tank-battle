@@ -15,6 +15,7 @@ function socketInit(server) {
     socket.on('kill', (id) => {
       delete gameState[id]
       coreTimer = refreshTimerWhenLeave(gameState, coreTimer)
+      io.emit('dead', id)
     })
 
     socket.on('disconnect', () => {
