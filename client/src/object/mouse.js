@@ -1,41 +1,39 @@
-const mouseKey = {
-  left: {
-    key: 1,
-    isDown: false
-  },
-  right: {
-    key: 3,
-    isDown: false
-  }
-}
+const { mouse } = require('../../src copy/object/mouse')
 
-const mouse = {
-  pageX: 0, // 相对页面
-  pageY: 0,
-  x: 0, // 相对shell盒子
-  y: 0,
-  init() {
-    document.addEventListener('mousemove', e => {
-      mouse.pageX = e.pageX
-      mouse.pageY = e.pageY
+class Mouse {
+  constructor(name) {
+    this.x = 0
+    this.y = 0
+    this.isDown = false
+    this.gameDom = document.querySelector(name)
+
+    document.addEventListener('mousemove', (e) => {
+      this.x = e.pageX - gameDom.offsetLeft
+      this.y = e.pageY - gameDom.offsetTop
     })
 
     document.addEventListener('mousedown', function (e) {
-      for (let k in mouseKey) {
-        if (mouseKey[k].key === e.which) mouseKey[k].isDown = true
-        // console.log(mouseKey[k].isDown);
-      }
+      if (e.button === 0) this.isDown = true
     })
 
     document.addEventListener('mouseup', function (e) {
-      for (let k in mouseKey) {
-        if (mouseKey[k].key === e.which) mouseKey[k].isDown = false
-        // console.log(mouseKey[k].isDown);
-      }
-
+      if (e.button === 0) this.isDown = false
     })
+  }
+
+  getRelativePosition() {
+    const { x, y } = this
+    return { x, y }
+  }
+
+  getIsDown() {
+    return this.isDown
+  }
+
+  getObjToMouseAngle(xPos, yPos) {
+    const angle = Math.atan(this.y - yPos / this.x - xPos)
+    return angle > 0 ? angle : angle + Math.PI
   }
 }
 
-
-export { mouse, mouseKey }
+module.exports = Mouse
