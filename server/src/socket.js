@@ -7,14 +7,13 @@ function socketInit(server) {
     console.log(socket.id, 'join')
     coreTimer = refreshTimerWhenStart(io, gameState, coreTimer)
     let flag = true
-    // gameState[socket.id] = {}
 
     socket.on('singleState', (state) => {
       if (flag) {
+        // 避免刚进入发送空对象
         gameState[socket.id] = {}
         flag = false
       }
-      // 一开始会发若干个空对象
       if (gameState[socket.id]) gameState[socket.id] = state
     })
 
