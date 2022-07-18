@@ -1,5 +1,7 @@
 import GameObj from './GameObj'
 import MyGameObj from './MyGameObj'
+import globalConfig from '../config'
+
 
 function createBulletDOM(className) {
   const DOM = document.createElement('li')
@@ -13,7 +15,7 @@ class MyBullet extends MyGameObj {
     this.fatherDOM = document.querySelector('.bullet-obj')
     this.xLength = 4
     this.yLength = 4
-    this.speed = 4
+    this.speed = globalConfig.bulletSpeed
     this.DOM = createBulletDOM('myBullet')
   }
 }

@@ -1,6 +1,7 @@
 import GameObj from './GameObj'
 import MyGameObj from './MyGameObj'
 import newBullet from './Bullet'
+import globalConfig from '../config'
 import { getThrottleFn } from '../utils'
 
 function createTanktDOM(className) {
@@ -13,16 +14,17 @@ function createTanktDOM(className) {
 }
 
 class MyTank extends MyGameObj {
-  constructor(config={}) {
+  constructor(config = {}) {
     super(config)
-    this.fatherDOM = document.querySelector('.tank-obj')
+    const { tankSpeed, fireBreak } = globalConfig
+    this.fatherDOM = document.querySelector('.tank-obj') 
     this.DOM = createTanktDOM('myTank')
     this.xLength = 20
     this.yLength = 20
-    this.speed = 4
+    this.speed = tankSpeed
     this.barrelDOM = this.DOM.querySelector('.barrel')
     this.bullets = []
-    this.fire = getThrottleFn(this.fire, 500) // 给 fire 节流
+    this.fire = getThrottleFn(this.fire, fireBreak) // 给 fire 节流
   }
 
   renderBarrel() {
@@ -75,7 +77,7 @@ class MyTank extends MyGameObj {
 }
 
 class OtherTank extends GameObj {
-  constructor(config={}) {
+  constructor(config = {}) {
     super(config)
     this.fatherDOM = document.querySelector('.tank-obj')
     this.DOM = createTanktDOM('otherTank')
@@ -130,7 +132,7 @@ class OtherTank extends GameObj {
     this.renderBullets()
   }
 
-  destroyAll(){
+  destroyAll() {
     this.destroy()
     this.bullets.forEach((bullet) => {
       bullet.destroy()
