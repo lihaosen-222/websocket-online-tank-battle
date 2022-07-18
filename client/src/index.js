@@ -25,6 +25,9 @@ socket.on('gameState', (gameState) => {
   }
   tankIds.forEach((id) => {
     otherTank[id].destroy() // 销毁死亡的 tank
+    otherTank[id].bullets.forEach(bullet=>{
+      bullet.destroy()
+    })
     delete otherTank[id]
   })
 
@@ -64,7 +67,7 @@ const coreTimer = startTimer(socket, otherTank)
 
 socket.on('dead', (id) => {
   if (id === socket.id) {
-    alert('dead')
     clearInterval(coreTimer)
+    alert('dead')
   }
 })
