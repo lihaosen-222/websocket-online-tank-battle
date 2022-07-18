@@ -1,7 +1,3 @@
-
-
-
-
 export function getThrottleFn (fn, wait) {
   let previous = 0
   return function () {

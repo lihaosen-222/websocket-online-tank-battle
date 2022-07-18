@@ -3,23 +3,8 @@ import startTimer from './coreTimer'
 import { io } from 'socket.io-client'
 import newTank from './object/Tank'
 
-var socket = io('http://localhost:3007')
-
-// 取右键菜单操作
-document.addEventListener('contextmenu', function (e) {
-  e.preventDefault()
-})
-// 取消文字选中
-document.addEventListener('selectstart', function (e) {
-  e.preventDefault()
-})
-
 const otherTank = {}
-
-function getDeadTanks(otherTank, gameState) {
-  const dead = Object.keys(otherTank)
-  const undead = Object.keys(gameState)
-}
+var socket = io('http://localhost:3007')
 
 socket.on('gameState', (gameState) => {
   delete gameState[socket.id]
@@ -50,11 +35,20 @@ socket.on('gameState', (gameState) => {
   })
 })
 
-const coreTimer = startTimer(socket, otherTank)
-
 socket.on('dead', (id) => {
   if (id === socket.id) {
     clearInterval(coreTimer)
     alert('dead')
   }
+})
+
+const coreTimer = startTimer(socket, otherTank)
+
+// 取右键菜单操作
+document.addEventListener('contextmenu', function (e) {
+  e.preventDefault()
+})
+// 取消文字选中
+document.addEventListener('selectstart', function (e) {
+  e.preventDefault()
 })

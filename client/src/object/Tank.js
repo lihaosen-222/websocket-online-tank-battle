@@ -1,7 +1,6 @@
 import GameObj from './GameObj'
 import MyGameObj from './MyGameObj'
 import newBullet from './Bullet'
-import GameMap from './GameMap'
 import { getThrottleFn } from '../utils'
 
 function createTanktDOM(className) {
