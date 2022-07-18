@@ -1,10 +1,9 @@
 import GameMap from './object/GameMap'
 import KeyBoard from './object/Keyboard'
 import Mouse from './object/Mouse'
-import GameObj from './object/GameObj'
 import newTank from './object/Tank'
 
-export default function startTimer(socket,otherTanks) {
+export default function startTimer(socket, otherTanks) {
   const keyBoard = new KeyBoard()
   const mouse = new Mouse('.shell')
   const gameMap = new GameMap(600, 600)
@@ -14,11 +13,9 @@ export default function startTimer(socket,otherTanks) {
   })
   myTank.create()
 
-  return  setInterval(function () {
+  return setInterval(function () {
     const { xPos, yPos } = myTank.getPostion()
-    if (mouse.getIsDown()) {
-      myTank.fire()
-    }
+    if (mouse.getIsDown()) myTank.fire()
 
     if (keyBoard.getIsDown()) {
       let { xPos: xTo, yPos: yTo } = myTank.getNextPostion()
@@ -31,28 +28,11 @@ export default function startTimer(socket,otherTanks) {
     myTank.updateDirection(mouse.getObjToMouseAngle(xPos, yPos))
     myTank.renderBarrel()
 
-    myTank.bullets = myTank.bullets.filter((bullet) => {
-      const { xPos, yPos } = bullet.getNextPostion()
-      if (gameMap.isCollided(xPos, yPos)) {
-        bullet.destroy()
-        return false
-      }
-      bullet.updatePosition(xPos, yPos)
-      bullet.render()
-      return true
+    myTank.updateAndRenderBullets(gameMap)
+    myTank.isHit(otherTanks, (id) => {
+      socket.emit('kill', id)
     })
 
-    myTank.bullets.forEach(bullet => {
-      for (const id in otherTanks) {
-        // console.log(bullet)
-        if (GameObj.isCollided(otherTanks[id], bullet)) {
-          console.log('kill')
-          socket.emit('kill', id)
-        }
-      }
-    })
-
-    // console.log(Object.keys(myTank.getState()) === 0)
     socket.emit('singleState', myTank.getState())
   }, 20)
 }

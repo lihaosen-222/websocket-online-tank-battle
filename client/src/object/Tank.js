@@ -1,8 +1,8 @@
 import GameObj from './GameObj'
 import MyGameObj from './MyGameObj'
 import newBullet from './Bullet'
-import { getThrottleFn } from '../utils'
 import GameMap from './GameMap'
+import { getThrottleFn } from '../utils'
 
 function createTanktDOM(className) {
   const DOM = document.createElement('li')
@@ -43,13 +43,35 @@ class MyTank extends MyGameObj {
 
   fire() {
     const { xPos, yPos, direction } = this
-    const bullet = newBullet('my', {
-      xPos,
-      yPos,
-    })
+    const bullet = newBullet('my', { xPos, yPos })
     bullet.updateDirection(direction)
     bullet.create()
     this.bullets.push(bullet)
+  }
+
+  // 判断击中
+  isHit(tanks, callBack) {
+    this.bullets.forEach((bullet) => {
+      for (const id in tanks) {
+        if (GameObj.isCollided(tanks[id], bullet)) {
+          callBack(id)
+        }
+      }
+    })
+  }
+
+  // 需要 map 实例判断是否撞墙
+  updateAndRenderBullets(gameMap) {
+    this.bullets = this.bullets.filter((bullet) => {
+      const { xPos, yPos } = bullet.getNextPostion()
+      if (gameMap.isCollided(xPos, yPos)) {
+        bullet.destroy()
+        return false
+      }
+      bullet.updatePosition(xPos, yPos)
+      bullet.render()
+      return true
+    })
   }
 }
 
@@ -64,6 +86,7 @@ class OtherTank extends GameObj {
     this.bullets = []
     this.direction = config.direction
   }
+
   updateDirection(direction) {
     this.direction = direction
   }
@@ -72,7 +95,6 @@ class OtherTank extends GameObj {
     this.barrelDOM.style.transform = `rotate(${angle360}deg)`
   }
 
-  // 根据 state 更新 bullets
   updateBullets(bulletsState) {
     for (let i = 0; i < bulletsState.length; i++) {
       const { xPos, yPos } = bulletsState[i]
@@ -107,6 +129,13 @@ class OtherTank extends GameObj {
     this.renderBarrel()
     this.render()
     this.renderBullets()
+  }
+
+  destroyAll(){
+    this.destroy()
+    this.bullets.forEach((bullet) => {
+      bullet.destroy()
+    })
   }
 }
 

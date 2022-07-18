@@ -16,40 +16,40 @@ document.addEventListener('selectstart', function (e) {
 
 const otherTank = {}
 
+function getDeadTanks(otherTank, gameState) {
+  const dead = Object.keys(otherTank)
+  const undead = Object.keys(gameState)
+}
+
 socket.on('gameState', (gameState) => {
   delete gameState[socket.id]
-  // 可以写个函数，得到死亡 id
-  const tankIds = Object.keys(otherTank)
-  for (const k in gameState) {
-    if (tankIds.includes(k)) tankIds.splice(tankIds.indexOf(k), 1)
-  }
-  tankIds.forEach((id) => {
-    otherTank[id].destroy() // 销毁死亡的 tank
-    otherTank[id].bullets.forEach((bullet) => {
-      bullet.destroy()
-    })
+  const deadIds = Object.keys(otherTank)
+  const liveIds = Object.keys(gameState)
+  liveIds.forEach((id) => {
+    if (deadIds.includes(id)) deadIds.splice(deadIds.indexOf(id), 1)
+  })
+
+  deadIds.forEach((id) => {
+    otherTank[id].destroyAll()
     delete otherTank[id]
   })
 
-  for (const k in gameState) {
-    const { tank, bullets } = gameState[k]
-    // if (!tank) return // 刚开始可能传空对象
-    const { xPos, yPos, direction } = tank
-
-    if (otherTank[k]) {
-      const tank = otherTank[k]
-      tank.updateAndRenderAll(gameState[k])
-    }
-    // 新增 tank
-    else {
+  liveIds.forEach((id) => {
+    const state = gameState[id]
+    const tank = otherTank[id]
+    if (tank) {
+      // 渲染现有 tank
+      tank.updateAndRenderAll(state)
+    } else {
+      // 新增 tank
       const tank = newTank('other', {
         fatherDOM: document.querySelector('.tank-obj'),
       })
       tank.create()
-      tank.updateAndRenderAll(gameState[k])
-      otherTank[k] = tank
+      tank.updateAndRenderAll(state)
+      otherTank[id] = tank
     }
-  }
+  })
 })
 
 const coreTimer = startTimer(socket, otherTank)
