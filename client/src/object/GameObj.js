@@ -29,8 +29,8 @@ class GameObj {
   // 根据自身维护的数据渲染
   render() {
     const { xPos, yPos, xLength, yLength, DOM } = this
-    DOM.style.left = xPos - xLength/2 + 'px'
-    DOM.style.top = yPos - yLength/2 + 'px'
+    DOM.style.left = xPos - xLength / 2 + 'px'
+    DOM.style.top = yPos - yLength / 2 + 'px'
   }
 
   destroy() {
@@ -38,17 +38,23 @@ class GameObj {
   }
 
   static isCollided(obj1, obj2) {
-    const { isOverLap } = GameObj
+    // const { isOverLap } = GameObj
+    const isXOverLap =
+      Math.abs(obj1.xPos - obj2.xPos) < obj1.xLength / 2 + obj2.xLength / 2
+    const isYOverLap =
+      Math.abs(obj1.yPos - obj2.yPos) < obj1.yLength / 2 + obj2.yLength / 2
     // console.log(isOverLap('x', obj1, obj2))
-    return isOverLap('x', obj1, obj2) && isOverLap('y', obj1, obj2)
+    return isXOverLap && isYOverLap
   }
 
   static isOverLap(direction, obj1, obj2) {
     const isX = direction === 'x' || 'X'
     const position = isX ? 'xPos' : 'yPos'
     const length = isX ? 'xLength' : 'yLength'
-    return Math.abs(obj1[position] - obj2[position]) <
+    return (
+      Math.abs(obj1[position] - obj2[position]) <
       obj1[length] / 2 + obj2[length] / 2
+    )
   }
 }
 

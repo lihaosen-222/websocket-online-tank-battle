@@ -6,9 +6,15 @@ function socketInit(server) {
   io.on('connection', (socket) => {
     console.log(socket.id, 'join')
     coreTimer = refreshTimerWhenStart(io, gameState, coreTimer)
-    gameState[socket.id] = {}
+    let flag = true
+    // gameState[socket.id] = {}
 
-    socket.on('singleState', (state) => {   // 一开始会发若干个空对象
+    socket.on('singleState', (state) => {
+      if (flag) {
+        gameState[socket.id] = {}
+        flag = false
+      }
+      // 一开始会发若干个空对象
       if (gameState[socket.id]) gameState[socket.id] = state
     })
 
@@ -27,17 +33,9 @@ function socketInit(server) {
 
 function refreshTimerWhenStart(io, gameState, coreTimer) {
   if (!Object.keys(gameState).length) {
-    return (coreTimer = setInterval(function () {
+    return setInterval(function () {
       io.emit('gameState', gameState)
-      // const keys = Object.keys(gameState)
-      // for (const k of keys) {
-      //   if (!gameState[k].tank) {
-      //     console.log(gameState)
-      //   }
-      // }
-      
-      // console.log(gameState)
-    }, 20))
+    }, 20)
   } else {
     return coreTimer
   }

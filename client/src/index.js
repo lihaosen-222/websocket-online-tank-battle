@@ -30,7 +30,7 @@ socket.on('gameState', (gameState) => {
 
   for (const k in gameState) {
     const { tank, bullets } = gameState[k]
-    if (!tank) return // 刚开始可能传空对象
+    // if (!tank) return // 刚开始可能传空对象
     const { xPos, yPos, direction } = tank
 
     if (otherTank[k]) {
@@ -58,7 +58,6 @@ socket.on('gameState', (gameState) => {
     }
   }
 
-  // updateBullets
 })
 
 const coreTimer = startTimer(socket, otherTank)
