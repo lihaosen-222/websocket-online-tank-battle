@@ -16,6 +16,7 @@ function createTanktDOM(className) {
 class MyTank extends MyGameObj {
   constructor(config) {
     super(config)
+    this.fatherDOM = document.querySelector('.tank-obj')
     this.DOM = createTanktDOM('myTank')
     this.xLength = 20
     this.yLength = 20
@@ -43,7 +44,6 @@ class MyTank extends MyGameObj {
   fire() {
     const { xPos, yPos, direction } = this
     const bullet = newBullet('my', {
-      fatherDOM: document.querySelector('.bullet-obj'),
       xPos,
       yPos,
     })
@@ -56,6 +56,7 @@ class MyTank extends MyGameObj {
 class OtherTank extends GameObj {
   constructor(config) {
     super(config)
+    this.fatherDOM = document.querySelector('.tank-obj')
     this.DOM = createTanktDOM('otherTank')
     this.xLength = 20
     this.yLength = 20
@@ -73,16 +74,12 @@ class OtherTank extends GameObj {
 
   // 根据 state 更新 bullets
   updateBullets(bulletsState) {
-    const stateLength = bulletsState.length
-    // const max = Math.max(bulletsState.length, this.bullets.length)
-    // console.log(bulletsState)
     for (let i = 0; i < bulletsState.length; i++) {
       const { xPos, yPos } = bulletsState[i]
       if (this.bullets[i]) {
         this.bullets[i].updatePosition(xPos, yPos)
       } else {
         this.bullets[i] = newBullet('other', {
-          fatherDOM: document.querySelector('.bullet-obj'),
           xPos,
           yPos,
         })
@@ -90,17 +87,26 @@ class OtherTank extends GameObj {
       }
     }
 
-    this.bullets.splice(bulletsState.length).forEach(bullet => {
-      console.log('desty')
+    this.bullets.splice(bulletsState.length).forEach((bullet) => {
       bullet.destroy()
     })
-
   }
 
   renderBullets() {
     this.bullets.forEach((bullet) => {
       bullet.render()
     })
+  }
+
+  updateAndRenderAll(state) {
+    const { tank, bullets } = state
+    const { xPos, yPos, direction } = tank
+    this.updatePosition(xPos, yPos)
+    this.updateDirection(direction)
+    this.updateBullets(bullets)
+    this.renderBarrel()
+    this.render()
+    this.renderBullets()
   }
 }
 

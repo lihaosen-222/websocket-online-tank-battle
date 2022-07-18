@@ -10,7 +10,6 @@ export default function startTimer(socket,otherTanks) {
   const gameMap = new GameMap(600, 600)
 
   const myTank = newTank('my', {
-    fatherDOM: document.querySelector('.tank-obj'),
     ...gameMap.getRandomPosition(),
   })
   myTank.create()

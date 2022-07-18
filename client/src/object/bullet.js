@@ -10,6 +10,7 @@ function createBulletDOM(className) {
 class MyBullet extends MyGameObj {
   constructor(config) {
     super(config)
+    this.fatherDOM = document.querySelector('.bullet-obj')
     this.xLength = 4
     this.yLength = 4
     this.speed = 4
@@ -20,6 +21,7 @@ class MyBullet extends MyGameObj {
 class OtherBullet extends GameObj {
   constructor(config) {
     super(config)
+    this.fatherDOM = document.querySelector('.bullet-obj')
     this.xLength = 4
     this.yLength = 4
     this.DOM = createBulletDOM('OtherBullet')

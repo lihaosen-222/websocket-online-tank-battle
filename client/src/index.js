@@ -25,7 +25,7 @@ socket.on('gameState', (gameState) => {
   }
   tankIds.forEach((id) => {
     otherTank[id].destroy() // 销毁死亡的 tank
-    otherTank[id].bullets.forEach(bullet=>{
+    otherTank[id].bullets.forEach((bullet) => {
       bullet.destroy()
     })
     delete otherTank[id]
@@ -38,29 +38,18 @@ socket.on('gameState', (gameState) => {
 
     if (otherTank[k]) {
       const tank = otherTank[k]
-
-      tank.updatePosition(xPos, yPos)
-      tank.updateDirection(direction)
-      tank.renderBarrel()
-      tank.render()
-      tank.updateBullets(bullets)
-      tank.renderBullets()
+      tank.updateAndRenderAll(gameState[k])
     }
     // 新增 tank
     else {
       const tank = newTank('other', {
         fatherDOM: document.querySelector('.tank-obj'),
-        xPos,
-        yPos,
-        direction,
       })
       tank.create()
-      tank.renderBarrel()
-      tank.render()
+      tank.updateAndRenderAll(gameState[k])
       otherTank[k] = tank
     }
   }
-
 })
 
 const coreTimer = startTimer(socket, otherTank)
