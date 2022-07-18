@@ -1,5 +1,5 @@
 class GameObj {
-  constructor(config) {
+  constructor(config={}) {
     // config 太长了
     const { fatherDOM, xPos, yPos, xLength, yLength, DOM } = config
     this.fatherDOM = fatherDOM // fatherDOM 应该标识该物体，方便添加样式

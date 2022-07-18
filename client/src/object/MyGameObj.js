@@ -1,7 +1,7 @@
 import GameObj from './GameObj'
 
 class MyGameObj extends GameObj {
-  constructor(config) {
+  constructor(config={}) {
     super(config)
     const { speed, direction } = config
     this.speed = speed

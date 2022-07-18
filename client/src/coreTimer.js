@@ -8,9 +8,7 @@ export default function startTimer(socket, otherTanks) {
   const mouse = new Mouse('.shell')
   const gameMap = new GameMap(600, 600)
 
-  const myTank = newTank('my', {
-    ...gameMap.getRandomPosition(),
-  })
+  const myTank = newTank('my', { ...gameMap.getRandomPosition() })
   myTank.create()
 
   return setInterval(function () {

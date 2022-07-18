@@ -42,9 +42,7 @@ socket.on('gameState', (gameState) => {
       tank.updateAndRenderAll(state)
     } else {
       // 新增 tank
-      const tank = newTank('other', {
-        fatherDOM: document.querySelector('.tank-obj'),
-      })
+      const tank = newTank('other')
       tank.create()
       tank.updateAndRenderAll(state)
       otherTank[id] = tank

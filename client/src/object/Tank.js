@@ -14,7 +14,7 @@ function createTanktDOM(className) {
 }
 
 class MyTank extends MyGameObj {
-  constructor(config) {
+  constructor(config={}) {
     super(config)
     this.fatherDOM = document.querySelector('.tank-obj')
     this.DOM = createTanktDOM('myTank')
@@ -76,7 +76,7 @@ class MyTank extends MyGameObj {
 }
 
 class OtherTank extends GameObj {
-  constructor(config) {
+  constructor(config={}) {
     super(config)
     this.fatherDOM = document.querySelector('.tank-obj')
     this.DOM = createTanktDOM('otherTank')
