@@ -4,7 +4,7 @@ import { io } from 'socket.io-client'
 import newTank from './object/Tank'
 
 const otherTank = {}
-var socket = io('http://localhost:3007')
+var socket = io()
 
 socket.on('gameState', (gameState) => {
   delete gameState[socket.id]

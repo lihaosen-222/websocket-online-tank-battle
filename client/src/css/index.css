@@ -1,6 +1,7 @@
 * {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 
 li {
@@ -45,6 +46,7 @@ body {
   height: 4px;
   width: 4px;
   background-color: black;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
   left: -4px;
   top: -4px;
 }
@@ -52,7 +54,7 @@ body {
 .shell {
   height: 600px;
   width: 600px;
-  background-color: lightblue;
+  background-color: #cba16f;
   position: relative;
 }
 
@@ -65,20 +67,49 @@ body {
 }
 
 .tank {
-  background-color: rgb(177, 163, 163);
+  background-color: #25342d;
   height: 20px;
   width: 20px;
   left: -30px;
   top: -30px;
-  border: 1px solid black;
+  border: 5px solid #3a4a49;
+  box-shadow: 3px 2px 7px rgba(0, 0, 0, 0.5);
 }
 
 .barrel {
   position: absolute;
-  height: 4px;
-  width: 20px;
-  background-color: black;
-  top: 10px;
-  left: 10px;
+  height: 5px;
+  width: 15px;
+  background-color: #25342d;
+  top: 3px;
+  left: 5px;
   transform-origin: 0px 2px;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+.grass li {
+  position: absolute;
+  background-color: #005C00;
+  z-index: 10;
+}
+
+.grass1{
+  left: 200px;
+  top: 275px;
+  height: 75px;
+  width: 100px;
+}
+
+.grass2{
+  left: 250px;
+  top: 250px;
+  height: 50px;
+  width: 100px;
+}
+
+.grass3{
+  left: 500px;
+  top: 0px;
+  height: 40px;
+  width: 100px;
 }
