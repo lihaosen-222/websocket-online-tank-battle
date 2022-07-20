@@ -1,7 +1,18 @@
 import './css/index.css'
+import { checkMobile } from './utils'
 import startTimer from './coreTimer'
 import { io } from 'socket.io-client'
 import newTank from './object/Tank'
+
+if (checkMobile()) {
+  const scale = (document.body.clientWidth - 50) / 600
+  document
+    .querySelector('meta[name=viewport]')
+    .setAttribute(
+      'content',
+      `width=device-width, initial-scale=${scale},, user-scalable=0`
+    )
+}
 
 const otherTank = {}
 var socket = io()
@@ -48,6 +59,7 @@ const coreTimer = startTimer(socket, otherTank)
 document.addEventListener('contextmenu', function (e) {
   e.preventDefault()
 })
+
 // 取消文字选中
 document.addEventListener('selectstart', function (e) {
   e.preventDefault()

@@ -43,7 +43,6 @@ class GameObj {
       Math.abs(obj1.xPos - obj2.xPos) < obj1.xLength / 2 + obj2.xLength / 2
     const isYOverLap =
       Math.abs(obj1.yPos - obj2.yPos) < obj1.yLength / 2 + obj2.yLength / 2
-    // console.log(isOverLap('x', obj1, obj2))
     return isXOverLap && isYOverLap
   }
 

@@ -1,11 +1,14 @@
 import GameMap from './object/GameMap'
 import KeyBoard from './object/Keyboard'
-import Mouse from './object/Mouse'
+import Tap from './object/Tap'
 import newTank from './object/Tank'
+import { checkMobile } from './utils'
+
+const isMobile = checkMobile()
 
 export default function startTimer(socket, otherTanks) {
   const keyBoard = new KeyBoard()
-  const mouse = new Mouse('.shell')
+  const tap = new Tap('.shell', isMobile ? 'mobile' : 'pc')
   const gameMap = new GameMap(600, 600)
 
   const myTank = newTank('my', { ...gameMap.getRandomPosition() })
@@ -13,9 +16,9 @@ export default function startTimer(socket, otherTanks) {
 
   return setInterval(function () {
     const { xPos, yPos } = myTank.getPostion()
-    if (mouse.getIsDown()) myTank.fire()
+    if (tap.getIsDown()) myTank.fire()
 
-    if (keyBoard.getIsDown()) {
+    if (keyBoard.getIsDown() || tap.getIsDown()) {
       let { xPos: xTo, yPos: yTo } = myTank.getNextPostion()
       xTo = gameMap.isXCollided(xTo) ? xPos : xTo
       yTo = gameMap.isYCollided(yTo) ? yPos : yTo
@@ -23,7 +26,7 @@ export default function startTimer(socket, otherTanks) {
       myTank.render()
     }
 
-    myTank.updateDirection(mouse.getObjToMouseAngle(xPos, yPos))
+    myTank.updateDirection(tap.getObjToAngle(xPos, yPos))
     myTank.renderBarrel()
 
     myTank.updateAndRenderBullets(gameMap)
