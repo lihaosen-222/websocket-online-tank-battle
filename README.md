@@ -1,10 +1,22 @@
 # websocket-online-tank-battle
-
-
+## gameState
+```
+{
+	"cOGovBDRMs9YuAsQAAAF": {
+		"tank": {
+			"xPos": 423.7183547981496,
+			"yPos": 513.631550843396,
+			"direction": -0.9913250935910298
+		},
+		"bullets": []
+	}
+	...
+}
+```
 ## 服务端：
-状态击中管理
-若干监听：connection、singleState、kill、disconnect
-两个发送：gameState、dead（）
+	状态击中管理
+	若干监听：connection、singleState、kill、disconnect
+	两个发送：gameState、dead（）
 ## 客户端：
 ### 控制类：
 鼠标、键盘
