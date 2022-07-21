@@ -3,6 +3,7 @@ import { checkMobile } from './utils'
 import startTimer from './coreTimer'
 import { io } from 'socket.io-client'
 import newTank from './object/Tank'
+import GameMap from './object/GameMap'
 
 if (checkMobile()) {
   const scale = (document.body.clientWidth - 50) / 600
@@ -14,25 +15,31 @@ if (checkMobile()) {
     )
 }
 
-const otherTank = {}
-var socket = io()
+const gameMap = new GameMap(600, 600)
+const myTank = newTank('my', { ...gameMap.getRandomPosition() })
+myTank.create()
+const otherTanks = {}
+const socket = io()
+let isDead = false
 
+const coreTimer = startTimer({ socket, otherTanks, gameMap, myTank })
+ 
 socket.on('gameState', (gameState) => {
   delete gameState[socket.id]
-  const deadIds = Object.keys(otherTank)
+  const deadIds = Object.keys(otherTanks)
   const liveIds = Object.keys(gameState)
   liveIds.forEach((id) => {
     if (deadIds.includes(id)) deadIds.splice(deadIds.indexOf(id), 1)
   })
 
   deadIds.forEach((id) => {
-    otherTank[id].destroyAll()
-    delete otherTank[id]
+    otherTanks[id].destroyAll()
+    delete otherTanks[id]
   })
 
   liveIds.forEach((id) => {
     const state = gameState[id]
-    const tank = otherTank[id]
+    const tank = otherTanks[id]
     if (tank) {
       // 渲染现有 tank
       tank.updateAndRenderAll(state)
@@ -41,19 +48,19 @@ socket.on('gameState', (gameState) => {
       const tank = newTank('other')
       tank.create()
       tank.updateAndRenderAll(state)
-      otherTank[id] = tank
+      otherTanks[id] = tank
     }
   })
 })
 
 socket.on('dead', (id) => {
-  if (id === socket.id) {
+  if (id === socket.id && !isDead) {
+    isDead = true
     clearInterval(coreTimer)
-    alert('dead')
+    document.querySelector('.modal').style.display = 'block'
+    myTank.destroyAll()
   }
 })
-
-const coreTimer = startTimer(socket, otherTank)
 
 // 取右键菜单操作
 document.addEventListener('contextmenu', function (e) {

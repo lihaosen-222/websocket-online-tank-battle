@@ -96,3 +96,39 @@ body {
 .text li{
   margin-top: 10px;
 }
+
+.modal {
+  display: none;
+  z-index: 100;
+  position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.modal-content h1{
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+  font-size: 200px;
+  font-weight: 400;
+  color: #982425;
+}
+
+.modal-content p {
+  text-align: center;
+}
+
+.modal-content a {
+  font-size: 23px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.3)
+}

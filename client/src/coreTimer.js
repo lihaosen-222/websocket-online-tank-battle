@@ -1,18 +1,15 @@
-import GameMap from './object/GameMap'
 import KeyBoard from './object/Keyboard'
 import Tap from './object/Tap'
-import newTank from './object/Tank'
 import { checkMobile } from './utils'
+
 
 const isMobile = checkMobile()
 
-export default function startTimer(socket, otherTanks) {
+export default function startTimer(config ) {
+  const {socket, otherTanks, gameMap, myTank} = config
+
   const keyBoard = new KeyBoard()
   const tap = new Tap('.shell', isMobile ? 'mobile' : 'pc')
-  const gameMap = new GameMap(600, 600)
-
-  const myTank = newTank('my', { ...gameMap.getRandomPosition() })
-  myTank.create()
 
   return setInterval(function () {
     const { xPos, yPos } = myTank.getPostion()

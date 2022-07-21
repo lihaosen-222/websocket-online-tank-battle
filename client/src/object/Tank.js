@@ -55,7 +55,7 @@ class MyTank extends MyGameObj {
     this.bullets.forEach((bullet) => {
       for (const id in tanks) {
         if (GameObj.isCollided(tanks[id], bullet)) {
-          callBack(id)
+          callBack(id) 
         }
       }
     })
@@ -72,6 +72,13 @@ class MyTank extends MyGameObj {
       bullet.updatePosition(xPos, yPos)
       bullet.render()
       return true
+    })
+  }
+
+  destroyAll() {
+    this.destroy()
+    this.bullets.forEach((bullet) => {
+      bullet.destroy()
     })
   }
 }
