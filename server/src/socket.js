@@ -27,6 +27,10 @@ function socketInit(server) {
       delete gameState[socket.id]
       coreTimer = refreshTimerWhenLeave(gameState, coreTimer)
     })
+
+    socket.on('latency', (arg, callback) => {
+      callback()
+    })
   })
 }
 

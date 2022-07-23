@@ -132,3 +132,10 @@ body {
   font-weight: 700;
   color: rgba(255, 255, 255, 0.3)
 }
+
+.latency {
+  z-index: 99px;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}

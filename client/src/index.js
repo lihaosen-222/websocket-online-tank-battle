@@ -26,3 +26,12 @@ const myTank = newTank('my', { ...gameMap.getRandomPosition() }).create()
 
 const coreTimer = startTimer({ socket, myTank, otherTanks, gameMap })
 socketOn({ socket, coreTimer, myTank, otherTanks })
+
+// 测延迟
+const latencyDOM = document.querySelector('.latency')
+setInterval(() => {
+  const lastTime = Date.now()
+  socket.emit('latency', undefined, () => {
+    latencyDOM.innerHTML = Date.now() - lastTime + 'ms'
+  })
+}, 500)
