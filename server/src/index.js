@@ -7,7 +7,7 @@ const socketInit = require("./socket")
 socketInit(server)
 app.use("/", express.static("./static"))
 
-const expressPort = 3007
+const expressPort = 8006
 server.listen(expressPort, () => {
   console.log(`start at ${expressPort}`)
 })
