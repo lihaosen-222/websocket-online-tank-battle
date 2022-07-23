@@ -1,5 +1,5 @@
 import './css/index.css'
-import { checkMobile } from './utils'
+import { checkMobile, getDeadIds, preventDefaultEvent } from './utils'
 import startTimer from './coreTimer'
 import { io } from 'socket.io-client'
 import newTank from './object/Tank'
@@ -15,21 +15,21 @@ if (checkMobile()) {
     )
 }
 
+// 取消右键菜单操作和文字选中的默认事件
+preventDefaultEvent('contextmenu', 'selectstart')
+
 const socket = io()
 const otherTanks = {}
 const gameMap = new GameMap(600, 600)
-const myTank = newTank('my', { ...gameMap.getRandomPosition() }).create() 
+const myTank = newTank('my', { ...gameMap.getRandomPosition() }).create()
 let isDead = false
 
 const coreTimer = startTimer({ socket, otherTanks, gameMap, myTank })
 
 socket.on('gameState', (gameState) => {
   delete gameState[socket.id]
-  const deadIds = Object.keys(otherTanks)
   const liveIds = Object.keys(gameState)
-  liveIds.forEach((id) => {
-    if (deadIds.includes(id)) deadIds.splice(deadIds.indexOf(id), 1)
-  })
+  const deadIds = getDeadIds(Object.keys(otherTanks), liveIds)
 
   deadIds.forEach((id) => {
     otherTanks[id].destroyAll()
@@ -58,14 +58,4 @@ socket.on('dead', (id) => {
     document.querySelector('.modal').style.display = 'block'
     myTank.destroyAll()
   }
-})
-
-// 取右键菜单操作
-document.addEventListener('contextmenu', function (e) {
-  e.preventDefault()
-})
-
-// 取消文字选中
-document.addEventListener('selectstart', function (e) {
-  e.preventDefault()
 })

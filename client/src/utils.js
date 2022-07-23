@@ -22,3 +22,20 @@ export function checkMobile() {
     return true
   return false
 }
+
+
+export function getDeadIds(lastLiveIds, liveIds) {
+  const deadIds = []
+  lastLiveIds.forEach((id) => {
+    if (!liveIds.includes(id)) deadIds.push(id)
+  })
+  return deadIds
+}
+
+export function preventDefaultEvent(...events) {
+  events.forEach((event) => {
+    document.addEventListener(event, (e) => {
+      e.preventDefault()
+    })
+  })
+}
