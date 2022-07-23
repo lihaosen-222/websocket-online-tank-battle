@@ -4,13 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon --inspect src/index",
-    "server": "cross-env NODE_ENV=production node --inspect src/index"
+    "dev": "nodemon --inspect src/index",
+    "server": "node --inspect src/index"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "socket.io": "^4.2.0"
   },
