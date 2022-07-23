@@ -10,6 +10,7 @@ class MyGameObj extends GameObj {
 
   updateDirection(direction) {
     this.direction = direction
+    return this
   }
 
   // tank 先 set 后计算，子弹 direction 恒定

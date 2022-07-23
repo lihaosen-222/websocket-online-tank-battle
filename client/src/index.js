@@ -15,15 +15,14 @@ if (checkMobile()) {
     )
 }
 
-const gameMap = new GameMap(600, 600)
-const myTank = newTank('my', { ...gameMap.getRandomPosition() })
-myTank.create()
-const otherTanks = {}
 const socket = io()
+const otherTanks = {}
+const gameMap = new GameMap(600, 600)
+const myTank = newTank('my', { ...gameMap.getRandomPosition() }).create() 
 let isDead = false
 
 const coreTimer = startTimer({ socket, otherTanks, gameMap, myTank })
- 
+
 socket.on('gameState', (gameState) => {
   delete gameState[socket.id]
   const deadIds = Object.keys(otherTanks)
@@ -46,8 +45,7 @@ socket.on('gameState', (gameState) => {
     } else {
       // 新增 tank
       const tank = newTank('other')
-      tank.create()
-      tank.updateAndRenderAll(state)
+      tank.create().updateAndRenderAll(state)
       otherTanks[id] = tank
     }
   })

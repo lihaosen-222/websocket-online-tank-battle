@@ -11,14 +11,15 @@ class GameObj {
   }
 
   create(xPos = this.xPos, yPos = this.yPos) {
-    this.updatePosition(xPos, yPos)
-    this.render()
+    this.updatePosition(xPos, yPos).render()
     this.fatherDOM.appendChild(this.DOM)
+    return this
   }
 
   updatePosition(xPos, yPos) {
     this.xPos = xPos
     this.yPos = yPos
+    return this
   }
 
   getPostion() {
@@ -31,29 +32,20 @@ class GameObj {
     const { xPos, yPos, xLength, yLength, DOM } = this
     DOM.style.left = xPos - xLength / 2 + 'px'
     DOM.style.top = yPos - yLength / 2 + 'px'
+    return this
   }
 
   destroy() {
     this.fatherDOM.removeChild(this.DOM)
+    return this
   }
 
   static isCollided(obj1, obj2) {
-    // const { isOverLap } = GameObj
     const isXOverLap =
       Math.abs(obj1.xPos - obj2.xPos) < obj1.xLength / 2 + obj2.xLength / 2
     const isYOverLap =
       Math.abs(obj1.yPos - obj2.yPos) < obj1.yLength / 2 + obj2.yLength / 2
     return isXOverLap && isYOverLap
-  }
-
-  static isOverLap(direction, obj1, obj2) {
-    const isX = direction === 'x' || 'X'
-    const position = isX ? 'xPos' : 'yPos'
-    const length = isX ? 'xLength' : 'yLength'
-    return (
-      Math.abs(obj1[position] - obj2[position]) <
-      obj1[length] / 2 + obj2[length] / 2
-    )
   }
 }
 

@@ -17,7 +17,7 @@ class MyTank extends MyGameObj {
   constructor(config = {}) {
     super(config)
     const { tankSpeed, fireBreak } = globalConfig
-    this.fatherDOM = document.querySelector('.tank-obj') 
+    this.fatherDOM = document.querySelector('.tank-obj')
     this.DOM = createTanktDOM('myTank')
     this.xLength = 20
     this.yLength = 20
@@ -30,6 +30,7 @@ class MyTank extends MyGameObj {
   renderBarrel() {
     const angle360 = (this.direction / Math.PI / 2) * 360
     this.barrelDOM.style.transform = `rotate(${angle360}deg)`
+    return this
   }
 
   getState() {
@@ -48,17 +49,19 @@ class MyTank extends MyGameObj {
     bullet.updateDirection(direction)
     bullet.create()
     this.bullets.push(bullet)
+    return this
   }
 
   // 判断击中
-  isHit(tanks, callBack) {
+  onHit(tanks, callBack) {
     this.bullets.forEach((bullet) => {
       for (const id in tanks) {
         if (GameObj.isCollided(tanks[id], bullet)) {
-          callBack(id) 
+          callBack(id)
         }
       }
     })
+    return this
   }
 
   // 需要 map 实例判断是否撞墙
@@ -73,6 +76,7 @@ class MyTank extends MyGameObj {
       bullet.render()
       return true
     })
+    return this
   }
 
   destroyAll() {
@@ -80,6 +84,7 @@ class MyTank extends MyGameObj {
     this.bullets.forEach((bullet) => {
       bullet.destroy()
     })
+    return this
   }
 }
 
@@ -97,10 +102,12 @@ class OtherTank extends GameObj {
 
   updateDirection(direction) {
     this.direction = direction
+    return this
   }
   renderBarrel() {
     const angle360 = (this.direction / Math.PI / 2) * 360
     this.barrelDOM.style.transform = `rotate(${angle360}deg)`
+    return this
   }
 
   updateBullets(bulletsState) {
@@ -120,12 +127,14 @@ class OtherTank extends GameObj {
     this.bullets.splice(bulletsState.length).forEach((bullet) => {
       bullet.destroy()
     })
+    return this
   }
 
   renderBullets() {
     this.bullets.forEach((bullet) => {
       bullet.render()
     })
+    return this
   }
 
   updateAndRenderAll(state) {
@@ -137,6 +146,7 @@ class OtherTank extends GameObj {
     this.renderBarrel()
     this.render()
     this.renderBullets()
+    return this
   }
 
   destroyAll() {
@@ -144,6 +154,7 @@ class OtherTank extends GameObj {
     this.bullets.forEach((bullet) => {
       bullet.destroy()
     })
+    return this
   }
 }
 
